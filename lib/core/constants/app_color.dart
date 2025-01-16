@@ -13,22 +13,22 @@ class AppColor {
   static Color darkSecondLabelContainer = Colors.grey.shade500;
   static Color darkTertiaryLabelContainer = Colors.grey.shade600;
   static const MaterialColor mainColor = MaterialColor(
-    0xFF6A2C9C, // رنگ اصلی
-    <int, Color>{
-      50: Color(0xFFE9B5D7), // شید 50
-      100: Color(0xFFD99FC7), // شید 100
-      200: Color(0xFFC68AC8), // شید 200
-      300: Color(0xFFB175C9), // شید 300
-      400: Color(0xFF9A61CA), // شید 400
-      500: Color(0xFF6A2C9C), // رنگ اصلی (شید 500)
-      600: Color(0xFF5C2390), // شید 600
-      700: Color(0xFF4F1A83), // شید 700
-      800: Color(0xFF421172), // شید 800
-      900: Color(0xFF33105F), // شید 900
-    },
-  );
+  0xFF6750A4, // رنگ اصلی
+  <int, Color>{
+    50: Color(0xFFE5DFF1), // شید 50
+    100: Color(0xFFD2C6E7), // شید 100
+    200: Color(0xFFB8A9DC), // شید 200
+    300: Color(0xFF9E8CD1), // شید 300
+    400: Color(0xFF8673C6), // شید 400
+    500: Color(0xFF6750A4), // رنگ اصلی (شید 500)
+    600: Color(0xFF5B4792), // شید 600
+    700: Color(0xFF4F3E80), // شید 700
+    800: Color(0xFF43356E), // شید 800
+    900: Color(0xFF372B5C), // شید 900
+  },
+);
   static Color SecondColor=mainColor.shade400;
-  static Color TertiaryColor= Color.fromRGBO(241, 211, 250, 1);
+  static Color TertiaryColor= mainColor.shade50;
   static Color baseColor=Colors.white;
   static Color textTicketScreenLight =mainColor.shade900;
   static Color textTicketScreenDark =const Color.fromARGB(255, 164, 214, 255);
