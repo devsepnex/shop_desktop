@@ -204,11 +204,10 @@ class LoginScreen extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color.fromARGB(255, 33, 23, 57)
-                    .withOpacity(0.99), // رنگ تیره‌تر
-                const Color.fromARGB(255, 38, 20, 81).withOpacity(0.99),
-                const Color.fromARGB(255, 59, 32, 132).withOpacity(0.6),
-                Colors.white.withOpacity(0.7),
+               AppColor.gradientColor1,
+                AppColor.gradientColor2,
+                AppColor.gradientColor3,
+                AppColor.gradientColor4,
               ],
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,

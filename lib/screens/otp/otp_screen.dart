@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -9,13 +8,15 @@ import 'otp_provider.dart';
 
 class OtpScreen extends StatelessWidget {
   final String username;
+  final String password;
 
-  const OtpScreen({Key? key, required this.username}) : super(key: key);
+  const OtpScreen({Key? key, required this.username, required this.password})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => OtpProvider(username: username),
+      create: (context) => OtpProvider(username: username, password: password),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(
@@ -24,10 +25,10 @@ class OtpScreen extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color.fromARGB(255, 33, 23, 57).withOpacity(0.99),
-                const Color.fromARGB(255, 38, 20, 81).withOpacity(0.99),
-                const Color.fromARGB(255, 59, 32, 132).withOpacity(0.6),
-                Colors.white.withOpacity(0.7),
+                AppColor.gradientColor1,
+                AppColor.gradientColor2,
+                AppColor.gradientColor3,
+                AppColor.gradientColor4,
               ],
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
@@ -96,7 +97,8 @@ class OtpScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: List.generate(
                                   otpProvider.otpLength,
-                                  (index) => _buildOtpField(context, index, otpProvider),
+                                  (index) => _buildOtpField(
+                                      context, index, otpProvider),
                                 ).reversed.toList(),
                               ),
                               if (otpProvider.errorMessage.isNotEmpty)
@@ -104,7 +106,8 @@ class OtpScreen extends StatelessWidget {
                                   padding: const EdgeInsets.only(top: 8),
                                   child: Text(
                                     otpProvider.errorMessage,
-                                    style: TextStyle(color: Colors.red, fontSize: 14),
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 14),
                                   ),
                                 ),
                               SizedBox(height: 24),
@@ -120,12 +123,14 @@ class OtpScreen extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 40.0, vertical: 15.0),
                                   foregroundColor: Colors.white,
-                                  backgroundColor: const Color.fromARGB(255, 38, 20, 81)
-                                      .withOpacity(0.99),
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 38, 20, 81)
+                                          .withOpacity(0.99),
                                   minimumSize: Size(
                                       MediaQuery.of(context).size.width > 610
                                           ? 280
-                                          : MediaQuery.of(context).size.width * 0.9,
+                                          : MediaQuery.of(context).size.width *
+                                              0.9,
                                       51),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
@@ -133,16 +138,41 @@ class OtpScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 18),
-                              TextButton(
-                                onPressed: () {
-                                  otpProvider.clearOtp();
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  'ویرایش شماره',
-                                  style: TextStyle(
-                                      fontSize: 12, color: AppColor.baseColor),
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      otpProvider.clearOtp();
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'ویرایش شماره',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: AppColor.baseColor),
+                                    ),
+                                  ),
+                                  SizedBox(width: 2),
+                                  Text(
+                                    '/',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: AppColor.baseColor),
+                                  ),
+                                  SizedBox(width: 2),
+                                  TextButton(
+                                    onPressed: () {
+                                      otpProvider.newcode(context);
+                                    },
+                                    child: Text(
+                                      'درخواست کد جدید',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: AppColor.baseColor),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -159,7 +189,8 @@ class OtpScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOtpField(BuildContext context, int index, OtpProvider otpProvider) {
+  Widget _buildOtpField(
+      BuildContext context, int index, OtpProvider otpProvider) {
     int reverseIndex = otpProvider.otpLength - 1 - index;
 
     return Padding(
@@ -180,21 +211,21 @@ class OtpScreen extends StatelessWidget {
             }
           },
           child: TextField(
-  controller: otpProvider.controllers[reverseIndex],
-  focusNode: otpProvider.focusNodes[reverseIndex],
-  textAlign: TextAlign.center,
-  keyboardType: TextInputType.number,
-  maxLength: 1,
-  style: TextStyle(
-    color: Colors.white, // رنگ نوشته‌ها
-    fontSize: 18,        // اندازه فونت نوشته‌ها
-  ),
-          // child: TextField(
-          //   controller: otpProvider.controllers[reverseIndex],
-          //   focusNode: otpProvider.focusNodes[reverseIndex],
-          //   textAlign: TextAlign.center,
-          //   keyboardType: TextInputType.number,
-          //   maxLength: 1,
+            controller: otpProvider.controllers[reverseIndex],
+            focusNode: otpProvider.focusNodes[reverseIndex],
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.number,
+            maxLength: 1,
+            style: TextStyle(
+              color: Colors.white, // رنگ نوشته‌ها
+              fontSize: 18, // اندازه فونت نوشته‌ها
+            ),
+            // child: TextField(
+            //   controller: otpProvider.controllers[reverseIndex],
+            //   focusNode: otpProvider.focusNodes[reverseIndex],
+            //   textAlign: TextAlign.center,
+            //   keyboardType: TextInputType.number,
+            //   maxLength: 1,
             //decoration:  InputDecoration(
             //   counterText: '',
             //   border: OutlineInputBorder(
@@ -205,26 +236,32 @@ class OtpScreen extends StatelessWidget {
             //   fillColor: Colors.white.withOpacity(0.2),
             // ),
             decoration: InputDecoration(
-  counterText: '',
-  border: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white.withOpacity(0.5)), // حاشیه پیش‌فرض
-    borderRadius: BorderRadius.circular(8),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white.withOpacity(0.8)), // حاشیه در حالت فوکوس
-    borderRadius: BorderRadius.circular(8),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white.withOpacity(0.5)), // حاشیه در حالت غیر فوکوس
-    borderRadius: BorderRadius.circular(8),
-  ),
-  filled: true,
-  fillColor: Colors.white.withOpacity(0.2),
-),
+              counterText: '',
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.white.withOpacity(0.5)), // حاشیه پیش‌فرض
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color:
+                        Colors.white.withOpacity(0.8)), // حاشیه در حالت فوکوس
+                borderRadius: BorderRadius.circular(8),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.white
+                        .withOpacity(0.5)), // حاشیه در حالت غیر فوکوس
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.2),
+            ),
 
             onChanged: (value) {
               if (value.isNotEmpty) {
-                otpProvider.moveToNextFieldReverse(context, value, reverseIndex);
+                otpProvider.moveToNextFieldReverse(
+                    context, value, reverseIndex);
               }
             },
             inputFormatters: [
@@ -235,7 +272,8 @@ class OtpScreen extends StatelessWidget {
                 : TextInputAction.next,
             onSubmitted: (value) {
               if (reverseIndex == 0) {
-                FocusScope.of(context).requestFocus(otpProvider.buttonFocusNode);
+                FocusScope.of(context)
+                    .requestFocus(otpProvider.buttonFocusNode);
               }
             },
           ),

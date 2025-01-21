@@ -43,6 +43,7 @@ class LoginProvider extends ChangeNotifier {
           MaterialPageRoute(
             builder: (context) => OtpScreen(
               username: usernameController.text,
+              password :passwordController.text,
             ),
           ),
         );

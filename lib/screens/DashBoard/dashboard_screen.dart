@@ -110,11 +110,7 @@ AppBar _appBar(BuildContext context) {
       children: [
         Row(
           children: [
-            Text(
-              context.watch<DashboardProvider>().selectedMenuTitle,
-              textAlign: TextAlign.start,
-              style: TextStyle(fontSize: 18),
-            ),
+            
           ],
         ),
         Row(
@@ -166,12 +162,7 @@ AppBar _appBar(BuildContext context) {
                                           size: 15,
                                           color: AppColor.SecondColor,
                                         ),
-                                        // SizedBox(height: 24),
-                                        // Icon(
-                                        //   FontAwesomeIcons.home,
-                                        //   size: 15,
-                                        //   color: AppColor.SecondColor,
-                                        // ),
+                                   
                                       ],
                                     ),
                                   )),
@@ -185,7 +176,7 @@ AppBar _appBar(BuildContext context) {
                                               '${LiveData.firstName} ${LiveData.lastName}',
                                               style: TextStyle(
                                                   fontSize: 16,
-                                                  //fontWeight: FontWeight.bold,
+                                
                                                   color:
                                                       AppColor.darkContainer),
                                             ),
@@ -205,19 +196,6 @@ AppBar _appBar(BuildContext context) {
                                                   color:
                                                       AppColor.darkContainer),
                                             ),
-                                            // SizedBox(height: 15),
-                                            // TextButton(
-                                            //     onPressed: () {
-                                            //       Navigator.push(
-                                            //         context,
-                                            //         MaterialPageRoute(
-                                            //           builder: (context) =>
-                                            //             DashboardScreen(role: LiveData.role!),
-
-                                            //         ),
-                                            //       );
-                                            //     },
-                                            //     child: Text('سپنکس'))
                                           ],
                                         ),
                                       )),
@@ -250,23 +228,6 @@ AppBar _appBar(BuildContext context) {
                   size: 25,
                 )),
             SizedBox(width: 4),
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          DashboardScreen(role: LiveData.role!),
-                    ),
-                  );
-                },
-                child: Text(
-                  '${LiveData.firstName} ${LiveData.lastName}',
-                  style: TextStyle(
-                      fontSize: 16,
-                      //fontWeight: FontWeight.bold,
-                      color: AppColor.darkContainer),
-                ))
           ],
         ),
       ],
@@ -281,147 +242,203 @@ Widget _sideMenu(BuildContext context) {
       height: double.infinity,
       width: MediaQuery.of(context).size.width * 0.18,
       decoration: BoxDecoration(
-          color: Colors.white, ),
+        color: context.watch<MainProvider>().themeMode == ThemeMode.dark
+            ? AppColor.gradientColor3
+            : AppColor.mainColor.shade100,
+        borderRadius: BorderRadius.circular(8), // گوشه‌های گرد کل منو
+      ),
       child: Consumer<DashboardProvider>(
-        builder: (context, value, child) => ListView(
-          padding: EdgeInsets.zero,
-          children: List.generate(
-            value.menus.length,
-            (index) => Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child: InkWell(
-                    onTap: () {
-                      DashboardProvider provider = context.read<DashboardProvider>();
-
-                      if (value.menus[index].children.isNotEmpty) {
-                        provider.onParentMenuClicked(index, !provider.menus[index].isOpen);
-                      } else {
-                        provider.setSelectedMenuIndex(index);
-                        provider.setSelectedChildMenuIndex(null);
-                        provider.setCurrentScreen(value.menus[index].screen ?? UpdateScreen());
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          if (value.menus[index].children.isNotEmpty)
-                            value.menus[index].isOpen
-                                ? RotatedBox(
-                                    quarterTurns: 3,
-                                    child: Icon(
-                                      Icons.arrow_back_ios,
-                                      size: 18,
-                                      color: Colors.black,
-                                    ),
-                                  )
-                                : Icon(
-                                    Icons.arrow_back_ios,
-                                    size: 18,
-                                    color: Colors.black,
-                                  ),
-                          Spacer(),
-                          Text(
-                            value.menus[index].nameParent,
-                            style: TextStyle(
-                                color: value.selectedMenuIndex == index
-                                    ? AppColor.mainColor 
-                                    : Colors.black,
-                                fontSize: 16),
-                          ),
-                          if (value.menus[index].nameParent == "Tickets") ...[
-                            SizedBox(width: 8),
-                            Consumer<DashboardProvider>(
-                              builder: (context, provider, child) =>
-                                  CircleAvatar(
-                                backgroundColor: Colors.red,
-                                radius: 10,
-                                child: Text(
-                                  provider.openTicketsCount.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                          SizedBox(width: 8),
-                          Icon(
-                            value.menus[index].icon,
-                             color: value.selectedMenuIndex == index
-                                    ? AppColor.mainColor 
-                                    : Colors.black,
-                          ),
-                        ],
-                      ),
+        builder: (context, value, child) {
+          int? hoveredMenuIndex;
+          int? hoveredChildIndex;
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return ListView(
+                padding: EdgeInsets.zero,
+                children: List.generate(
+                  value.menus.length,
+                  (index) => Column(
+                    children: [
+                      MouseRegion(
+  onEnter: (_) => setState(() => hoveredMenuIndex = index),
+  onExit: (_) => setState(() => hoveredMenuIndex = null),
+  child: Container(
+    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4), // مشابه زیرمنو
+    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16), // مشابه زیرمنو
+    decoration: BoxDecoration(
+      color: index == value.selectedMenuIndex &&
+              value.selectedChildMenuIndex == null
+          ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+              ? AppColor.mainColor.shade100
+              : AppColor.gradientColor2
+          : hoveredMenuIndex == index
+              ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                  ? AppColor.mainColor.shade100
+                  : AppColor.gradientColor2
+              : Colors.transparent,
+      borderRadius: BorderRadius.circular(8), // گوشه‌های گرد
+    ),
+    child: InkWell(
+      onTap: () {
+        DashboardProvider provider = context.read<DashboardProvider>();
+        if (value.menus[index].children.isNotEmpty) {
+          provider.onParentMenuClicked(index, !provider.menus[index].isOpen);
+        } else {
+          provider.setSelectedMenuIndex(index);
+          provider.setSelectedChildMenuIndex(null);
+          provider.setCurrentScreen(value.menus[index].screen ?? UpdateScreen());
+        }
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (value.menus[index].children.isNotEmpty)
+            value.menus[index].isOpen
+                ? RotatedBox(
+                    quarterTurns: 3,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                      color: AppColor.mainColor.shade900,
                     ),
+                  )
+                : Icon(
+                    Icons.arrow_back_ios,
+                    size: 18,
+                    color: AppColor.mainColor.shade900,
                   ),
-                ),
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  height: value.menus[index].isOpen
-                      ? value.menus[index].children.length * 50
-                      : 0,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: value.menus[index].children.length,
-                    itemBuilder: (context, childIndex) {
-                      var child = value.menus[index].children[childIndex];
-                      bool isSelected = value.selectedMenuIndex == index &&
-                          value.selectedChildMenuIndex == childIndex;
-
-                      return Container(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        margin: EdgeInsets.symmetric(horizontal: 20),
-                        child: InkWell(
-                          onTap: () {
-                            value.setSelectedMenuIndex(index);
-                            value.setSelectedChildMenuIndex(childIndex);
-                            value.setCurrentScreen(child.screen);
-                            context.read<DashboardProvider>()
-                                .updateSelectedMenuTitle(child.name);
-                          },
-                          child: Container(
-                            alignment: Alignment.bottomRight,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                               
-                                SizedBox(width: 4),
-                                Text(
-                                  child.name,
-                                  style: TextStyle(
-                                    color: isSelected
-                                        ? AppColor.mainColor 
-                                        : Colors.black,
-                                    fontWeight: isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                                ),
-                                SizedBox(width: 4),
-                                  Icon(
-                            child.icon,
-                             color: isSelected
-                                    ? AppColor.mainColor 
-                                    : Colors.black,
-                          ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+          Spacer(),
+          // تغییر رنگ متن به سفید در حالت لایت و آمبر در حالت دارک
+          Text(
+            value.menus[index].nameParent,
+            style: TextStyle(
+              color: hoveredMenuIndex == index
+                  ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                   ?AppColor.gradientColor2
+                    : AppColor.baseColor
+                  : value.selectedMenuIndex == index &&
+                          value.selectedChildMenuIndex == null
+                      ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                          ? AppColor.mainColor.shade900
+                          : AppColor.baseColor
+                      : context.watch<MainProvider>().themeMode == ThemeMode.dark
+                          ? AppColor.baseColor
+                          : AppColor.mainColor.shade900,
+              fontSize: 16,
             ),
           ),
-        ),
+          SizedBox(width: 8),
+          Icon(
+            value.menus[index].icon,
+            color: hoveredMenuIndex == index
+                ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                    ?AppColor.gradientColor2
+                    : AppColor.baseColor
+                : value.selectedMenuIndex == index &&
+                        value.selectedChildMenuIndex == null
+                    ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                        ? AppColor.mainColor.shade900
+                        : AppColor.baseColor
+                    : context.watch<MainProvider>().themeMode == ThemeMode.dark
+                        ? AppColor.baseColor
+                        : AppColor.mainColor.shade900,
+          ),
+        ],
+      ),
+    ),
+  ),
+),
+
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        height: value.menus[index].isOpen
+                            ? value.menus[index].children.length * 50
+                            : 0,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: value.menus[index].children.length,
+                          itemBuilder: (context, childIndex) {
+                            var child = value.menus[index].children[childIndex];
+                            bool isSelected = value.selectedMenuIndex == index &&
+                                value.selectedChildMenuIndex == childIndex;
+                            return MouseRegion(
+  onEnter: (_) => setState(() => hoveredChildIndex = childIndex),
+  onExit: (_) => setState(() => hoveredChildIndex = null),
+  child: Container(
+    width: double.infinity,
+    margin: EdgeInsets.symmetric(horizontal: 12),
+    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    decoration: BoxDecoration(
+      color: isSelected ||
+              (hoveredChildIndex == childIndex &&
+                  value.selectedMenuIndex == index)
+          ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+              ? AppColor.mainColor.shade100
+              : AppColor.gradientColor2
+          : Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: InkWell(
+      onTap: () {
+        value.setSelectedMenuIndex(index);
+        value.setSelectedChildMenuIndex(childIndex);
+        value.setCurrentScreen(child.screen);
+        context.read<DashboardProvider>().updateSelectedMenuTitle(child.name);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(width: 4),
+          Text(
+            child.name,
+            style: TextStyle(
+              color: hoveredChildIndex == childIndex
+                  ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                      ? AppColor.gradientColor2
+                      : AppColor.baseColor
+                  : isSelected
+                      ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                          ? AppColor.mainColor.shade900
+                          : AppColor.baseColor
+                      : context.watch<MainProvider>().themeMode == ThemeMode.dark
+                          ? AppColor.baseColor
+                          : AppColor.mainColor.shade900,
+              fontWeight: isSelected
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            ),
+          ),
+          SizedBox(width: 4),
+          Icon(
+            child.icon,
+            color: hoveredChildIndex == childIndex
+                ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                    ? AppColor.gradientColor2
+                    : AppColor.baseColor
+                : isSelected
+                    ? context.watch<MainProvider>().themeMode == ThemeMode.dark
+                        ? AppColor.mainColor.shade900
+                        : AppColor.baseColor
+                    : context.watch<MainProvider>().themeMode == ThemeMode.dark
+                        ? AppColor.baseColor
+                        : AppColor.mainColor.shade900,
+          ),
+        ],
+      ),
+    ),
+  ),
+)
+;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     ),
   );

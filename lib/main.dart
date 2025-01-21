@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.light,
             fontFamily: 'vazir',
             colorScheme: ColorScheme.fromSeed(seedColor: AppColor.mainColor),
+            scaffoldBackgroundColor: AppColor.baseColor,
             useMaterial3: true,
             textTheme:
                 TextTheme(bodyMedium: TextStyle(color: AppColor.darkContainer)),
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             fontFamily: 'vazir',
             colorSchemeSeed: AppColor.darkBaseColor,
-            scaffoldBackgroundColor: Colors.grey.shade900,
+            scaffoldBackgroundColor: AppColor.gradientColor1,
             textTheme: TextTheme(
                 bodyMedium: TextStyle(color: AppColor.lightContainer)),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  static Color darkBaseColor = Color(0xFF4585B5);
+ static Color darkBaseColor = Color(0xFF4585B5);
   static Color lightTextTheme= Color(0xFF090909);
   static Color darkTextTheme= Color(0xFFECECEC);
   static Color darkContainer =Colors.grey.shade800;
@@ -33,4 +33,8 @@ class AppColor {
   static Color textTicketScreenLight =mainColor.shade900;
   static Color textTicketScreenDark =const Color.fromARGB(255, 164, 214, 255);
   static Color darkTicketScreen=const Color.fromARGB(255, 164, 214, 255);
+  static Color gradientColor1= const Color.fromARGB(255, 33, 23, 57).withOpacity(0.99);
+  static Color gradientColor2= const Color.fromARGB(255, 38, 20, 81).withOpacity(0.99);
+  static Color gradientColor3= const Color.fromARGB(255, 59, 32, 132).withOpacity(0.6);
+  static Color gradientColor4= Colors.white.withOpacity(0.7);
 }

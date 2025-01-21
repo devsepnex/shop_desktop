@@ -9,6 +9,7 @@ import 'package:shop/screens/DashBoard/dashboard_screen.dart';
 class OtpProvider extends ChangeNotifier {
   final int otpLength = 6; // تعداد فیلدهای OTP
   final String username;
+  final String password;
   late ApiManager apiManager;
 
   // لیست کنترلرها و فوکوس‌ها
@@ -18,7 +19,7 @@ class OtpProvider extends ChangeNotifier {
 
   String errorMessage = ''; // برای نگهداری پیام خطا
 
-  OtpProvider({required this.username}) {
+  OtpProvider({required this.username,required this.password}) {
     apiManager = GetIt.I.get<ApiManager>();
 
     // ساخت کنترلرها و فوکوس‌ها
@@ -133,4 +134,45 @@ class OtpProvider extends ChangeNotifier {
     buttonFocusNode.dispose(); // حذف فوکوس دکمه
     super.dispose();
   }
+
+ newcode(BuildContext context) async {
+   
+    notifyListeners();
+
+    try {
+      final body = {
+        'login_data': username,
+        'password': password,
+      };
+
+      Response? response = await apiManager.post(
+        path: 'server/login-admin-request',
+        body: body,
+      );
+
+      // بررسی وضعیت پاسخ از سرور
+      if (response?.statusCode == 200) {
+      
+      
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.badResponse) {
+        final response = e.response;
+        if (response != null) {
+          final errorMessage = response.data['message'] ?? 'خطای نامشخص';
+          showErrorDialog(context, errorMessage);
+        } else {
+          showErrorDialog(context, 'خطای ناشناخته از سمت سرور.');
+        }
+      } else if (e.type == DioExceptionType.connectionTimeout) {
+        showErrorDialog(context, 'اتصال به سرور امکان‌پذیر نیست. لطفاً دوباره تلاش کنید.');
+      } else {
+        showErrorDialog(context, 'خطای شبکه، لطفاً دوباره تلاش کنید.');
+      }
+    } catch (e) {
+      print('Unhandled Error: $e');
+      showErrorDialog(context, 'خطای ناشناخته، لطفاً دوباره تلاش کنید.');
+    } 
+  }
+ 
 }
